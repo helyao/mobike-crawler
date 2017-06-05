@@ -10,7 +10,7 @@
     2017-06-05 2:09pm   create
 -------------------------------------------------
 """
-
+import time
 import redis
 import ujson
 import pymysql
@@ -26,6 +26,7 @@ CONFIG_INI = r'config.ini'
 class MobikeCrawler():
     def __init__(self, mode='demo'):
         try:
+            self.startstamp = datetime.datetime.now()
             cp = configparser.ConfigParser()
             cp.read(CONFIG_INI)
             # Get Redis Configurations
@@ -44,6 +45,7 @@ class MobikeCrawler():
             mysql_db = cp.get('mysql', 'database')
             self.mysql_table = cp.get('mysql', 'table') if mode == 'demo' else 'mobike_' + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             self.mysql_seed = cp.get('mysql', 'seed')
+            self.mysql_log = cp.get('mysql', 'log')
             print('Mysql Connection: {host}:{port}@{user}/{passwd} at {database}/{table}'.format(host=mysql_host, port=mysql_port, user=mysql_user,
                                                                                                  passwd=mysql_pass, database=mysql_db, table=self.mysql_table))
             self._mconn = pymysql.connect(host=mysql_host, port=int(mysql_port), user=mysql_user, passwd=mysql_pass, db=mysql_db)
@@ -58,7 +60,7 @@ class MobikeCrawler():
             self.maxthread = int(cp.get('parameter', 'maxthread'))
             self.lock = threading.Lock()
             # Start Task Now by Settings in Config.ini
-            self.run()
+            # self.run()
         except Exception as ex:
             print('[MobikeCrawler]: {}'.format(ex))
 
@@ -164,13 +166,31 @@ class MobikeCrawler():
         except Exception as ex:
             print('[MobikeCrawler._closeMysql]: {}'.format(ex))
 
+    def _writeLog(self):
+        try:
+            self.endstamp = datetime.datetime.now()
+            cost = (self.endstamp - self.startstamp).seconds
+            print('This task totally costs {}s.'.format(cost))
+            self.startstamp = self.startstamp.strftime("%Y-%m-%d %H:%M:%S")
+            self.endstamp = self.endstamp.strftime("%Y-%m-%d %H:%M:%S")
+            sql = 'insert into {table}(`start`, `end`, `left`, `right`, `top`, `bottom`, `cost`) values(\'{start}\', \'{end}\', {left}, {right}, {top}, {bottom}, {cost})'.format(
+                table=self.mysql_log, start=self.startstamp, end=self.endstamp, left=self.left, right=self.right,
+                top=self.top, bottom=self.bottom, cost=cost)
+            self.mdb.execute(sql)
+            self.mdb.execute('commit')
+        except:
+            pass
+
     def __del__(self):
+        self._writeLog()
         self._closeMysql()
         # Redis need not close because it's just one connection in redis pool which managed by redis own manager.
 
 def run():
     mobike = MobikeCrawler()
     mobike.run()
+    # time.sleep(2)
+    # mobike._writeLog()
 
 if __name__ == '__main__':
     run()
