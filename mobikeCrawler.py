@@ -101,20 +101,22 @@ class MobikeCrawler():
                 'accept-encoding': "gzip",
                 'cache-control': "no-cache"
             }
-            self.request(headers, payload, url)
+            self.request(headers, payload, url, args)
         except Exception as ex:
             print('[MobikeCrawler.getMobikes]: {}'.format(ex))
 
-    def request(self, headers, payload, url, num_retries=5):
+    def request(self, headers, payload, url, args, num_retries=5):
         try:
             proxy = self.getProxy()
             proxies = {"http": "http://{proxy}".format(proxy=proxy), "https": "https://{proxy}".format(proxy=proxy)}
-            response = requests.request('POST', url, data=payload, headers=headers, proxies=proxies, timeout=10)
+            response = requests.request('POST', url, data=payload, headers=headers, proxies=proxies, timeout=10, verify=False)
             code = response.status_code
+            print(code)
             if (num_retries > 0):
                 if (500 <= code < 600):
-                    return self.request(headers, payload, url, num_retries - 1)
+                    return self.request(headers, payload, url, args, num_retries - 1)
             else:
+                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
                 return
             results = ujson.decode(response.text)['object']
             with self.lock:
@@ -128,8 +130,9 @@ class MobikeCrawler():
         except Exception as ex:
             print('[MobikeCrawler.getMobikes]: {}'.format(ex))
             if (num_retries > 0):
-                return self.request(headers, payload, url, num_retries - 1)
+                return self.request(headers, payload, url, args, num_retries - 1)
             else:
+                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
                 return
 
     # Redis Functions
