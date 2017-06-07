@@ -187,7 +187,7 @@ class MobikeCrawler():
         # Redis need not close because it's just one connection in redis pool which managed by redis own manager.
 
 def run():
-    mobike = MobikeCrawler()
+    mobike = MobikeCrawler(mode='demo3')
     mobike.run()
     # time.sleep(2)
     # mobike._writeLog()

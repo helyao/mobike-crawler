@@ -159,7 +159,7 @@ class MobikeCrawler():
         self._writeLog()
 
 def run():
-    mobike = MobikeCrawler()
+    mobike = MobikeCrawler(mode='demo2')
     mobike.run()
     # time.sleep(2)
     # mobike._writeLog()
