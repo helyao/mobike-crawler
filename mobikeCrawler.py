@@ -20,6 +20,7 @@ import datetime
 import threading
 import numpy as np
 import configparser
+from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -72,6 +73,7 @@ class MobikeCrawler():
         # init table to restore results
         self._initTable()
         # thread pool
+        results = []
         executor = ThreadPoolExecutor(max_workers=self.maxthread)
         lon_range = np.arange(self.left, self.right, self.offset)
         lat_range = np.arange(self.top, self.bottom, -self.offset)
@@ -80,7 +82,8 @@ class MobikeCrawler():
         print(lat_range)
         for lon in lon_range:
             for lat in lat_range:
-                executor.submit(self.getMobikes, (lon, lat))
+                results.append(executor.submit(self.getMobikes, (lon, lat)))
+        list(as_completed(results))
 
     def _initTable(self):
         if (self.mode == 'demo') :
@@ -207,10 +210,19 @@ def tick():
     time.sleep(5)
     print('finish Tick! The time is: {}'.format(datetime.datetime.now()))
 
+def multiTick():
+    # thread pool
+    print('------------------- RUN -------------------')
+    results = []
+    executor = ThreadPoolExecutor(max_workers=100)
+    for item in range(0,10):
+        results.append(executor.submit(tick))
+    list(as_completed(results))
+    print('------------------- END -------------------')
+
 def scheduletest():
-    tick()
     scheduler = BlockingScheduler()
-    scheduler.add_job(tick, 'interval', seconds=3)
+    scheduler.add_job(multiTick, 'interval', seconds=3)
     print('Press Ctrl+{} to exit'.format('Break' if os.name == 'nt' else 'C'))
     try:
         scheduler.start()
