@@ -191,11 +191,13 @@ class MobikeCrawler():
         self._closeMysql()
         # Redis need not close because it's just one connection in redis pool which managed by redis own manager.
 
+# one task
 def singlerun():
     mobike = MobikeCrawler(mode='demo3')
     mobike.run()
 
-def run():
+# run mode = every 5-minute run one task
+def runWithSchedule():
     singlerun()
     scheduler = BlockingScheduler()
     scheduler.add_job(singlerun, 'interval', seconds=300)
@@ -205,6 +207,17 @@ def run():
     except (KeyboardInterrupt, SystemExit):
         pass
 
+# run mode2 = run one task again and again right now
+def runRightNow():
+    while True:
+        singlerun()
+
+# choose run mode
+def run():
+    runRightNow()
+
+
+###### Just for test schedule ######
 def tick():
     print('Start Tick! The time is: {}'.format(datetime.datetime.now()))
     time.sleep(5)
@@ -228,6 +241,7 @@ def scheduletest():
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
         pass
+###### test end ######
 
 if __name__ == '__main__':
     run()
