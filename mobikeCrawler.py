@@ -10,6 +10,7 @@
     2017-06-05 2:09pm   create
 -------------------------------------------------
 """
+import os
 import time
 import redis
 import ujson
@@ -20,6 +21,7 @@ import threading
 import numpy as np
 import configparser
 from concurrent.futures import ThreadPoolExecutor
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 CONFIG_INI = r'config.ini'
 
@@ -186,11 +188,35 @@ class MobikeCrawler():
         self._closeMysql()
         # Redis need not close because it's just one connection in redis pool which managed by redis own manager.
 
-def run():
+def singlerun():
     mobike = MobikeCrawler(mode='demo3')
     mobike.run()
-    # time.sleep(2)
-    # mobike._writeLog()
+
+def run():
+    singlerun()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(singlerun, 'interval', seconds=300)
+    print('Press Ctrl+{} to exit'.format('Break' if os.name == 'nt' else 'C'))
+    try:
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        pass
+
+def tick():
+    print('Start Tick! The time is: {}'.format(datetime.datetime.now()))
+    time.sleep(5)
+    print('finish Tick! The time is: {}'.format(datetime.datetime.now()))
+
+def scheduletest():
+    tick()
+    scheduler = BlockingScheduler()
+    scheduler.add_job(tick, 'interval', seconds=3)
+    print('Press Ctrl+{} to exit'.format('Break' if os.name == 'nt' else 'C'))
+    try:
+        scheduler.start()
+    except (KeyboardInterrupt, SystemExit):
+        pass
 
 if __name__ == '__main__':
     run()
+    # scheduletest()
