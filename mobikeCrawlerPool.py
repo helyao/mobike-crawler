@@ -19,7 +19,7 @@ import datetime
 import threading
 import numpy as np
 import configparser
-from mysqlConnPool import getMysqlConnection
+from mysqlConnPool import MysqlPool
 from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'
@@ -53,6 +53,7 @@ class MobikeCrawler():
             # self.lock = threading.Lock()
             # Start Task Now by Settings in Config.ini
             # self.run()
+            self.dbPool = MysqlPool()
         except Exception as ex:
             print('[MobikeCrawler]: {}'.format(ex))
 
@@ -73,14 +74,17 @@ class MobikeCrawler():
                 executor.submit(self.getMobikes, (lon, lat))
 
     def _initTable(self):
-        with getMysqlConnection() as db:
-            if (self.mode == 'demo') :
-                # When mode is DEMO, clear temp table
-                db.cursor.execute('delete from {table}'.format(table=self.mysql_table))
-            else:
-                # When mode isn't DEMO, copy empty table <mobike_seed> to init
-                db.cursor.execute('create table {table} like {seed}'.format(table=self.mysql_table, seed=self.mysql_seed))
-            db.cursor.execute('commit')
+        conn = self.dbPool.getMysqlConn()
+        cursor = conn.cursor()
+        if (self.mode == 'demo') :
+            # When mode is DEMO, clear temp table
+            cursor.execute('delete from {table}'.format(table=self.mysql_table))
+        else:
+            # When mode isn't DEMO, copy empty table <mobike_seed> to init
+            cursor.execute('create table {table} like {seed}'.format(table=self.mysql_table, seed=self.mysql_seed))
+        cursor.execute('commit')
+        cursor.close()
+        conn.close()
 
     def getMobikes(self, args):
         try:
@@ -112,17 +116,20 @@ class MobikeCrawler():
                 if (500 <= code < 600):
                     return self.request(headers, payload, url, args, num_retries - 1)
             else:
-                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
+                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1])) # NOTE: should write into db
                 return
             results = ujson.decode(response.text)['object']
-            with getMysqlConnection() as db:
-                for x in results:
-                    sql = 'INSERT INTO {}(time, bikeid, biketype, distid, distnum, type, x, y, host) VALUES (NOW(),\'{}\',{},\'{}\',{},{},{},{},{})'.format(
-                        self.mysql_table, x['bikeIds'], int(x['biketype']), int(x['distId']), x['distNum'],
-                        x['type'], x['distX'], x['distY'], 0)
-                    db.cursor.execute(sql)
-                db.cursor.execute('commit')
-                return
+            conn = self.dbPool.getMysqlConn()
+            cursor = conn.cursor()
+            for x in results:
+                sql = 'INSERT INTO {}(time, bikeid, biketype, distid, distnum, type, x, y, host) VALUES (NOW(),\'{}\',{},\'{}\',{},{},{},{},{})'.format(
+                    self.mysql_table, x['bikeIds'], int(x['biketype']), int(x['distId']), x['distNum'],
+                    x['type'], x['distX'], x['distY'], 0)
+                cursor.execute(sql)
+            cursor.execute('commit')
+            cursor.close()
+            conn.close()
+            return
         except Exception as ex:
             print('[MobikeCrawler.getMobikes]: {}'.format(ex))
             if (num_retries > 0):
@@ -149,9 +156,12 @@ class MobikeCrawler():
             sql = 'insert into {table}(`start`, `end`, `left`, `right`, `top`, `bottom`, `cost`) values(\'{start}\', \'{end}\', {left}, {right}, {top}, {bottom}, {cost})'.format(
                 table=self.mysql_log, start=self.startstamp, end=self.endstamp, left=self.left, right=self.right,
                 top=self.top, bottom=self.bottom, cost=cost)
-            with getMysqlConnection() as db:
-                db.cursor.execute(sql)
-                db.cursor.execute('commit')
+            conn = self.dbPool.getMysqlConn()
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            cursor.execute('commit')
+            cursor.close()
+            conn.close()
         except:
             pass
 
@@ -159,7 +169,7 @@ class MobikeCrawler():
         self._writeLog()
 
 def run():
-    mobike = MobikeCrawler(mode='demo2')
+    mobike = MobikeCrawler(mode='demo3')
     mobike.run()
     # time.sleep(2)
     # mobike._writeLog()
