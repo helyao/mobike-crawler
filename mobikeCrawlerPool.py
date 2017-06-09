@@ -20,6 +20,7 @@ import threading
 import numpy as np
 import configparser
 from mysqlConnPool import MysqlPool
+from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'
@@ -63,6 +64,7 @@ class MobikeCrawler():
         # init table to restore results
         self._initTable()
         # thread pool
+        results = []
         executor = ThreadPoolExecutor(max_workers=self.maxthread)
         lon_range = np.arange(self.left, self.right, self.offset)
         lat_range = np.arange(self.top, self.bottom, -self.offset)
@@ -71,7 +73,8 @@ class MobikeCrawler():
         print(lat_range)
         for lon in lon_range:
             for lat in lat_range:
-                executor.submit(self.getMobikes, (lon, lat))
+                results.append(executor.submit(self.getMobikes, (lon, lat)))
+        list(as_completed(results))
 
     def _initTable(self):
         conn = self.dbPool.getMysqlConn()
@@ -169,10 +172,9 @@ class MobikeCrawler():
         self._writeLog()
 
 def run():
-    mobike = MobikeCrawler(mode='demo3')
-    mobike.run()
-    # time.sleep(2)
-    # mobike._writeLog()
+    while True:
+        mobike = MobikeCrawler(mode='demo3')
+        mobike.run()
 
 if __name__ == '__main__':
     run()
