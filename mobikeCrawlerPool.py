@@ -173,8 +173,12 @@ class MobikeCrawler():
 
 def run():
     while True:
-        mobike = MobikeCrawler(mode='demo3')
+        mobike = MobikeCrawler(mode='demo4')
         mobike.run()
 
+def runOnce():
+    mobike = MobikeCrawler(mode='demo4')
+    mobike.run()
+
 if __name__ == '__main__':
-    run()
+    runOnce()
