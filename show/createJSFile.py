@@ -7,7 +7,7 @@ PORT = 3306
 USER = 'helyao'
 PASSWD = 'welcome'
 DATABASE = 'mobike'
-TABLE = 'mobike_beijing_search'
+TABLE = 'mobike_shanghai_search'
 FILENAME = r'point.js'
 
 output = []
