@@ -27,45 +27,35 @@
 	map.centerAndZoom(new BMap.Point(121.548847, 31.093679), 11);
 	map.enableScrollWheelZoom();
 
-	var range1 = new BMap.Polygon([
-		new BMap.Point(121.068558,31.509344),
-		new BMap.Point(121.068558,31.316053),
-		new BMap.Point(121.689467,31.316053),
-		new BMap.Point(121.689467,31.509344)
-	], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
-	map.addOverlay(range1);
+    var divided = [
+        [[121.115127,31.51821], [121.340493,31.28742]],
+        [[121.069133,31.28742], [121.340493,31.145111]],
+        [[120.866763,31.145111], [121.340493,31.018433]],
+        [[121.000143,31.018433], [121.340493,30.855878]],
+        [[121.138123,30.855878], [121.340493,30.693043]],
+		[[121.340493,31.51821], [121.406236,30.693043]],
+		[[121.406236,31.483357], [121.476236, 30.749173]]
+    ];
 
-    var range2 = new BMap.Polygon([
-		new BMap.Point(121.068558,31.316053),
-		new BMap.Point(121.068558,31.161923),
-		new BMap.Point(121.841245,31.161923),
-		new BMap.Point(121.841245,31.316053)
-	], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});
-	map.addOverlay(range2);
+    var divcolor = ['blue', 'mediumaquamarine', 'green', 'red', 'grey', 'olive', 'darkorchid', 'fuchsia'];
 
-    var range3 = new BMap.Polygon([
-		new BMap.Point(120.870787,31.161923),
-		new BMap.Point(120.870787,30.948093),
-		new BMap.Point(121.565285,30.948093),
-		new BMap.Point(121.565285,31.161923)
-	], {strokeColor:"green", strokeWeight:2, strokeOpacity:0.5});
-	map.addOverlay(range3);
+    for (var divcount = 0; divcount < divided.length; divcount++) {
+        var pleft = divided[divcount][0][0];
+        var ptop = divided[divcount][0][1];
+        var pright = divided[divcount][1][0];
+        var pbottom = divided[divcount][1][1];
+        var range = new BMap.Polygon([
+            new BMap.Point(pleft, ptop),
+            new BMap.Point(pleft, pbottom),
+            new BMap.Point(pright, pbottom),
+            new BMap.Point(pright, ptop)
+        ], {strokeColor:divcolor[divcount], strokeWeight:2, strokeOpacity:0.5});
+        map.addOverlay(range);
+    }
 
-    var range4 = new BMap.Polygon([
-		new BMap.Point(120.994969,30.948093),
-		new BMap.Point(120.994969,30.694037),
-		new BMap.Point(121.565285,30.694037),
-		new BMap.Point(121.565285,30.948093)
-	], {strokeColor:"yellow", strokeWeight:2, strokeOpacity:0.5});
-	map.addOverlay(range4);
 
-    var range5 = new BMap.Polygon([
-		new BMap.Point(121.565285,31.161923),
-		new BMap.Point(121.565285,30.825119),
-		new BMap.Point(121.988423,30.825119),
-		new BMap.Point(121.988423,31.161923)
-	], {strokeColor:"orange", strokeWeight:2, strokeOpacity:0.5});
-	map.addOverlay(range5);
+
+
 
 </script>
 
