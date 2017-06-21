@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		html,body{
+            margin:0;
+            width:100%;
+            height:100%;
+            background:#ffffff;
+        }
+        #map{
+            width:100%;
+            height:100%;
+        }
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lS6dZ0dmC7EOVVByyEhYzoPaZxhqqHzt"></script>
+	<title>设置线、面可编辑</title>
+</head>
+<body>
+	<div id="map"></div>
+</body>
+</html>
+<script type="text/javascript">
+	var map = new BMap.Map("map");
+	map.centerAndZoom(new BMap.Point(121.548847, 31.093679), 11);
+	map.enableScrollWheelZoom();
+
+	var range1 = new BMap.Polygon([
+		new BMap.Point(121.068558,31.509344),
+		new BMap.Point(121.068558,31.316053),
+		new BMap.Point(121.689467,31.316053),
+		new BMap.Point(121.689467,31.509344)
+	], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(range1);
+
+    var range2 = new BMap.Polygon([
+		new BMap.Point(121.068558,31.316053),
+		new BMap.Point(121.068558,31.161923),
+		new BMap.Point(121.841245,31.161923),
+		new BMap.Point(121.841245,31.316053)
+	], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(range2);
+
+    var range3 = new BMap.Polygon([
+		new BMap.Point(120.870787,31.161923),
+		new BMap.Point(120.870787,30.948093),
+		new BMap.Point(121.565285,30.948093),
+		new BMap.Point(121.565285,31.161923)
+	], {strokeColor:"green", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(range3);
+
+    var range4 = new BMap.Polygon([
+		new BMap.Point(120.994969,30.948093),
+		new BMap.Point(120.994969,30.694037),
+		new BMap.Point(121.565285,30.694037),
+		new BMap.Point(121.565285,30.948093)
+	], {strokeColor:"yellow", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(range4);
+
+    var range5 = new BMap.Polygon([
+		new BMap.Point(121.565285,31.161923),
+		new BMap.Point(121.565285,30.825119),
+		new BMap.Point(121.988423,30.825119),
+		new BMap.Point(121.988423,31.161923)
+	], {strokeColor:"orange", strokeWeight:2, strokeOpacity:0.5});
+	map.addOverlay(range5);
+
+</script>
+
