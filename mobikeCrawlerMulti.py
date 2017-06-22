@@ -104,7 +104,7 @@ class MobikeCrawler():
             print(code)
             if (num_retries > 0):
                 if (500 <= code < 600):
-                    return self.request(headers, payload, url, args, num_retries - 1)
+                    return self.__request(headers, payload, url, args, num_retries - 1)
             else:
                 print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[
                     1]))  # NOTE: should write into db
@@ -124,7 +124,7 @@ class MobikeCrawler():
         except Exception as ex:
             print('[MobikeCrawler-{}.getMobikes]: {}'.format(self.index, ex))
             if (num_retries > 0):
-                return self.request(headers, payload, url, args, num_retries - 1)
+                return self.__request(headers, payload, url, args, num_retries - 1)
             else:
                 print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
                 return
