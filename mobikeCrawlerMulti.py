@@ -24,7 +24,7 @@ from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'  # configuration
-BLOCK_NUM = 12
+BLOCK_NUM = 1
 
 class MobikeCrawler():
 
@@ -163,9 +163,6 @@ class MobikeCrawler():
             'cost': self.cost,
             'index': self.index
         }
-        return message
-
-    def __writeLog(self):
         try:
             sql = 'insert into {table}(`start`, `end`, `left`, `right`, `top`, `bottom`, `cost`, `host`) values(\'{start}\', \'{end}\', {left}, {right}, {top}, {bottom}, {cost}, {host})'.format(
                 table=self.mysql_log, start=self.startstamp, end=self.endstamp, left=self.left, right=self.right,
@@ -178,9 +175,8 @@ class MobikeCrawler():
             conn.close()
         except:
             pass
+        return message
 
-    def __del__(self):
-        self.__writeLog()
 
 def createMysqlTable(mysql_table):
     global mysql_host, mysql_port, mysql_user, mysql_pass, mysql_db, mysql_seed
