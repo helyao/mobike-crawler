@@ -106,8 +106,7 @@ class MobikeCrawler():
                 if (500 <= code < 600):
                     return self.__request(headers, payload, url, args, num_retries - 1)
             else:
-                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[
-                    1]))  # NOTE: should write into db
+                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))  # NOTE: should write into db
                 return
             results = ujson.decode(response.text)['object']
             conn = self.dbPool.getMysqlConn()
