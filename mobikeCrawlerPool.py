@@ -180,6 +180,12 @@ def runOnce():
     mobike = MobikeCrawler(mode='Block2')
     mobike.run()
 
+def runRound():
+    for i in range(1, 13):
+        mobike = MobikeCrawler(mode='Block{}'.format(i))
+        mobike.run()
+
 if __name__ == '__main__':
-    runOnce()
+    # runOnce()
     # run()
+    runRound()
