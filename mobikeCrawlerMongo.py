@@ -91,7 +91,8 @@ class MobikeCrawler(object):
             'start': self.startstamp,
             'end': self.endstamp,
             'cost': self.cost,
-            'host': self.index
+            'host': self.index,
+            'table': self.mongo_data,
         }
         # Write log before finish
         try:
@@ -156,6 +157,7 @@ class MobikeCrawler(object):
                 colerror = self.mdb[self.mongo_error]
                 error = {
                     'time': self.__now(),
+                    'table': self.mongo_data,
                     'lon': args[0],
                     'lat': args[1],
                     'host': self.index
