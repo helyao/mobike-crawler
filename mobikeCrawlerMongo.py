@@ -142,7 +142,7 @@ class MobikeCrawler(object):
             coldata = self.mdb[self.mongo_data]
             for x in results['object']:
                 # restore data in mongodb
-                x['time'] = datetime.datetime.now()
+                x['time'] = self.__now()
                 x['host'] = self.index
                 coldata.insert(x)
             return
@@ -155,7 +155,7 @@ class MobikeCrawler(object):
                 # write error in mongodb
                 colerror = self.mdb[self.mongo_error]
                 error = {
-                    'time': datetime.datetime.now(),
+                    'time': self.__now(),
                     'lon': args[0],
                     'lat': args[1],
                     'host': self.index
@@ -173,6 +173,11 @@ class MobikeCrawler(object):
                 return
         except Exception as ex:
             print('[MobikeCrawler-{}.getProxy]: {}'.format(self.index, ex))
+
+    # Get current timestamp with string type
+    def __now(self):
+        now = datetime.datetime.now()
+        return now.strftime('%Y-%m-%d %H:%M:%S')
 
 def do(tablename, index):
     mobike = MobikeCrawler(table=tablename, index=index, mode='Block{}'.format(index))
