@@ -55,6 +55,7 @@ class MobikeCrawler():
             self.mysql_table = table
             self.mysql_seed = cp.get('mysql', 'seed')
             self.mysql_log = cp.get('mysql', 'log')
+            self.mysql_error = cp.get('mysql', 'error')
             self.__initMysqlTable()
         except Exception as ex:
             print('[MobikeCrawler-{}]: {}'.format(index, ex))
@@ -126,6 +127,13 @@ class MobikeCrawler():
                 return self.__request(headers, payload, url, args, num_retries - 1)
             else:
                 print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
+                sql = 'INSERT INTO {}(time, lon, lat, host) VALUES (NOW(), {}, {}, {})'.format(self.mysql_error, args[0], args[1], self.index)
+                conn = self.dbPool.getMysqlConn()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                cursor.execute('commit')
+                cursor.close()
+                conn.close()
                 return
 
     def __getProxy(self):

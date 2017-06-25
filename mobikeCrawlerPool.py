@@ -43,6 +43,7 @@ class MobikeCrawler():
             self.mysql_table = cp.get('mysql', 'table') if mode == 'demo' else 'mobike_' + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             self.mysql_seed = cp.get('mysql', 'seed')
             self.mysql_log = cp.get('mysql', 'log')
+            self.mysql_error = cp.get('mysql', 'error')
             # Get Task Parameters
             self.mode = mode
             self.left = float(cp.get(self.mode, 'left'))
