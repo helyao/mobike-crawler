@@ -96,7 +96,7 @@ class MobikeCrawler(object):
         # Write log before finish
         try:
             collog = self.mdb[self.mongo_log]
-            collog.insert(json.dumps(message))
+            collog.insert(message)
         except:
             pass
         return message
@@ -160,7 +160,7 @@ class MobikeCrawler(object):
                     'lat': args[1],
                     'host': self.index
                 }
-                colerror.insert(json.dumps(error))
+                colerror.insert(error)
                 return
 
     # Get proxy from redis
