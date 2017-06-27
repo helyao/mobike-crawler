@@ -133,7 +133,7 @@ class MobikeCrawler(object):
             else:
                 response = requests.request('POST', url, data=payload, headers=headers, timeout=10, verify=False)
             code = response.status_code
-            print(code)
+            # print(code)
             if (num_retries > 0):
                 if (500 <= code < 600):
                     return self.__request(headers, payload, url, args, num_retries - 1)
