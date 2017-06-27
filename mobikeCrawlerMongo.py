@@ -74,8 +74,8 @@ class MobikeCrawler(object):
         lon_range = np.arange(self.left, self.right, self.offset)
         lat_range = np.arange(self.top, self.bottom, -self.offset)
         print('This task will be divied {} pieces'.format(len(lon_range) * len(lat_range)))
-        print(lon_range)
-        print(lat_range)
+        # print(lon_range)
+        # print(lat_range)
         for lon in lon_range:
             for lat in lat_range:
                 results.append(executor.submit(self.__getMobikes, (lon, lat)))
@@ -138,7 +138,7 @@ class MobikeCrawler(object):
                 if (500 <= code < 600):
                     return self.__request(headers, payload, url, args, num_retries - 1)
             else:
-                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
+                # print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
                 return
             results = json.loads(response.text)
             coldata = self.mdb[self.mongo_data]
@@ -149,11 +149,11 @@ class MobikeCrawler(object):
                 coldata.insert(x)
             return
         except Exception as ex:
-            print('[MobikeCrawler-{}.getMobikes]: {}'.format(self.index, ex))
+            # print('[MobikeCrawler-{}.getMobikes]: {}'.format(self.index, ex))
             if (num_retries > 0):
                 return self.__request(headers, payload, url, args, num_retries - 1)
             else:
-                print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
+                # print('Cannot get the data near point=({lon}, {lat})'.format(lon=args[0], lat=args[1]))
                 # write error in mongodb
                 colerror = self.mdb[self.mongo_error]
                 error = {
