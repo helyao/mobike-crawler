@@ -197,21 +197,21 @@ if __name__ == '__main__':
     mysql_pass = cp.get('mysql', 'passwd')
     mysql_db = cp.get('mysql', 'database')
     mysql_seed = cp.get('mysql', 'seed')
-    # while True:
-    # Start TimeStamp
-    startstamp = datetime.datetime.now()
-    # Table Name
-    tablename = 'mobike_{}'.format(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
-    # Run
-    results = []
-    pool = multiprocessing.Pool(processes=BLOCK_NUM)
-    for num in range(1, BLOCK_NUM+1):
-        results.append(pool.apply_async(func=do, args=(tablename, num)))
-    pool.close()
-    pool.join()
-    # End TimeStamp
-    endstamp = datetime.datetime.now()
-    # Results
-    for item in results:
-        print(item.get())
-    print('Project costs {}s'.format((endstamp - startstamp).seconds))
+    while True:
+        # Start TimeStamp
+        startstamp = datetime.datetime.now()
+        # Table Name
+        tablename = 'mobike_{}'.format(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
+        # Run
+        results = []
+        pool = multiprocessing.Pool(processes=BLOCK_NUM)
+        for num in range(1, BLOCK_NUM+1):
+            results.append(pool.apply_async(func=do, args=(tablename, num)))
+        pool.close()
+        pool.join()
+        # End TimeStamp
+        endstamp = datetime.datetime.now()
+        # Results
+        for item in results:
+            print(item.get())
+        print('Project costs {}s'.format((endstamp - startstamp).seconds))
