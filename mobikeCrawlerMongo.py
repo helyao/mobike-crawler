@@ -8,6 +8,7 @@
 -------------------------------------------------
     Change Logs:
     2017-06-25 6:40pm   create
+    2017-06-27 6:53pm   re-divided to 28 pieces
 -------------------------------------------------
 """
 import os
@@ -24,7 +25,7 @@ from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'  # config file
-BLOCK_NUM = 12              # divided 12 pieces
+BLOCK_NUM = 28              # divided 28 pieces
 
 class MobikeCrawler(object):
 
