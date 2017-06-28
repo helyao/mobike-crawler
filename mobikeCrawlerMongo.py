@@ -25,7 +25,9 @@ from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'  # config file
-BLOCK_NUM = 28              # divided 28 pieces
+# FullSHDivide into 28 pieces
+BLOCK_NUM = 28      # The mount of pieces in this machine
+START_NUM = 1       # The start block number
 
 class MobikeCrawler(object):
 
@@ -205,7 +207,7 @@ if __name__ == '__main__':
         # Run
         results = []
         pool = multiprocessing.Pool(processes=BLOCK_NUM)
-        for num in range(1, BLOCK_NUM+1):
+        for num in range(START_NUM, BLOCK_NUM+START_NUM):
             results.append(pool.apply_async(func=do, args=(tablename, num)))
         pool.close()
         pool.join()

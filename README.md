@@ -2,6 +2,29 @@
 
 Get the position of mobikes in a rectangular range.
 
+---
+
+FullSHDivide into 28 pieces = 400s/round
+
+MyLinux 	= 14 pieces 	= 1 ~ 14
+
+Server 		= 8 pieces	    = 15 ~ 22
+
+T420s		= 6 pieces	    = 23 ~ 28 
+
+
+T420 = 6 pieces
+
+mobike_20170628_170733
+
+MyLinux = 14 pieces
+
+mobike_20170628_164504
+
+Server = 8 pieces
+
+mobike_20170628_171613
+
 Mysql Environment:
 
     -- ----------------------------
