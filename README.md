@@ -19,22 +19,6 @@ T420s		= 6 pieces	    = 23 ~ 28   = localhost.mobike
 Mysql Environment:
 
     -- ----------------------------
-    -- Table structure for mobike_log
-    -- ----------------------------
-    DROP TABLE IF EXISTS `mobike_log`;
-    CREATE TABLE `mobike_log` (
-      `id` int(11) NOT NULL AUTO_INCREMENT,
-      `start` datetime DEFAULT NULL,
-      `end` datetime DEFAULT NULL,
-      `left` double(10,6) DEFAULT NULL,
-      `right` double(10,6) DEFAULT NULL,
-      `top` double(10,6) DEFAULT NULL,
-      `bottom` double(10,6) DEFAULT NULL,
-      `cost` double DEFAULT NULL,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-    
-    -- ----------------------------
     -- Table structure for mobike_seed
     -- ----------------------------
     DROP TABLE IF EXISTS `mobike_seed`;
@@ -48,4 +32,34 @@ Mysql Environment:
       `x` double(10,6) DEFAULT NULL,
       `y` double(10,6) DEFAULT NULL,
       `host` tinyint(4) DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+    -- ----------------------------
+    -- Table structure for mobike_log
+    -- ----------------------------
+    DROP TABLE IF EXISTS `mobike_log`;
+    CREATE TABLE `mobike_log` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `start` datetime DEFAULT NULL,
+      `end` datetime DEFAULT NULL,
+      `left` double(10,6) DEFAULT NULL,
+      `right` double(10,6) DEFAULT NULL,
+      `top` double(10,6) DEFAULT NULL,
+      `bottom` double(10,6) DEFAULT NULL,
+      `cost` double DEFAULT NULL,
+      `host` tinyint(4) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+    
+    -- ----------------------------
+    -- Table structure for mobike_error
+    -- ----------------------------
+    DROP TABLE IF EXISTS `mobike_error`;
+    CREATE TABLE `mobike_error` (
+      `id` int(11) NOT NULL,
+      `time` datetime DEFAULT NULL,
+      `lon` double(10,6) DEFAULT NULL,
+      `lat` double(10,6) DEFAULT NULL,
+      `host` tinyint(4) DEFAULT NULL,
+      PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
