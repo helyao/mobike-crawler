@@ -75,10 +75,11 @@ class MobikeCrawler(object):
             self.offset = float(cp.get('parameter', 'offset'))
             self.maxthread = int(cp.get('parameter', 'maxthread'))
             # Create Unique in MongoDB
-            self.createIndex(table)
+            # self.createIndex(table)
         except Exception as ex:
             print('[MobikeCrawler-{}]: {}'.format(index, ex))
 
+    # Add compound index will cost lots time
     def createIndex(self, table):
         coll = self.mdb[table]
         coll.create_index([("bikeIds", 1), ("distX", 1), ("distY", 1)], unique=True)

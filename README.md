@@ -13,8 +13,10 @@ Server 		= 8 pieces	    = 15 ~ 22   = MyLinux.mobike
 T420s		= 6 pieces	    = 23 ~ 28   = localhost.mobike
 
 
+2017-06-30 10:40am +
 
 ---
+
 
 Mysql Environment:
 
