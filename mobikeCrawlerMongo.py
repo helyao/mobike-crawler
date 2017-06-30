@@ -29,6 +29,16 @@ CONFIG_INI = r'config.ini'  # config file
 BLOCK_NUM = 28      # The mount of pieces in this machine
 START_NUM = 1       # The start block number
 
+# MyLinux
+# BLOCK_NUM = 14
+# START_NUM = 1
+# Server
+# BLOCK_NUM = 8
+# START_NUM = 15
+# T420s
+# BLOCK_NUM = 6
+# START_NUM = 23
+
 class MobikeCrawler(object):
 
     # Init, get parameters from config file
@@ -64,8 +74,14 @@ class MobikeCrawler(object):
             self.bottom = float(cp.get(self.mode, 'bottom'))
             self.offset = float(cp.get('parameter', 'offset'))
             self.maxthread = int(cp.get('parameter', 'maxthread'))
+            # Create Unique in MongoDB
+            self.createIndex(table)
         except Exception as ex:
             print('[MobikeCrawler-{}]: {}'.format(index, ex))
+
+    def createIndex(self, table):
+        coll = self.mdb[table]
+        coll.create_index([("bikeIds", 1), ("distX", 1), ("distY", 1)], unique=True)
 
     # run task
     def run(self):
