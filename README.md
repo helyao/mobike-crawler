@@ -18,6 +18,9 @@ T420s		= 6 pieces	    = 23 ~ 28   = localhost.mobike
 new range:
 2017-07-01  11:00 PM +
 
+new range again:
+mobike_20170702_020457
+
 ---
 
 Should add:
