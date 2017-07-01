@@ -15,6 +15,9 @@ T420s		= 6 pieces	    = 23 ~ 28   = localhost.mobike
 
 2017-06-30 11:40am +
 
+new range:
+2017-07-01  11:00 PM +
+
 ---
 
 Should add:
