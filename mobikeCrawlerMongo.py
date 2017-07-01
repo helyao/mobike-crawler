@@ -26,8 +26,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 CONFIG_INI = r'config.ini'  # config file
 # FullSHDivide into 28 pieces
-BLOCK_NUM = 28      # The mount of pieces in this machine
-START_NUM = 1       # The start block number
+# BLOCK_NUM = 28      # The mount of pieces in this machine
+# START_NUM = 1       # The start block number
+BLOCK_NUM = 12
+START_NUM = 1
 
 # MyLinux
 # BLOCK_NUM = 14
